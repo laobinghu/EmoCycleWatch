@@ -78,8 +78,7 @@ jobs:
         with:
           tag_name: ${{ github.ref_name }}
           name: "Release ${{ github.ref_name }} (${{ steps.date.outputs.date }})"
-          body_path: ${{ github.workspace }}/CHANGELOG.md
-          fail_on_unmatched: true
+          generate_release_notes: true
           draft: false
           prerelease: false
           files: |
