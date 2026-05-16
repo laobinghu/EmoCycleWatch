@@ -16,6 +16,7 @@ import androidx.wear.compose.material3.AppScaffold
 import top.eaverse.emocycle.watch.data.local.AppDatabase
 import top.eaverse.emocycle.watch.data.repository.MoodLogRepository
 import top.eaverse.emocycle.watch.sync.NoOpMoodLogSyncer
+import top.eaverse.emocycle.watch.ui.screen.AboutScreen
 import top.eaverse.emocycle.watch.ui.screen.HomeMenuScreen
 import top.eaverse.emocycle.watch.ui.screen.MoodHistoryScreen
 import top.eaverse.emocycle.watch.ui.screen.MoodLogFormScreen
@@ -27,7 +28,8 @@ class MainActivity : ComponentActivity() {
     private enum class AppScreen {
         HOME,
         RECORD,
-        HISTORY
+        HISTORY,
+        ABOUT
     }
 
     private val viewModel: MoodLogViewModel by viewModels {
@@ -66,7 +68,8 @@ class MainActivity : ComponentActivity() {
                     when (screen) {
                         AppScreen.HOME -> HomeMenuScreen(
                             onRecordNowClick = { screen = AppScreen.RECORD },
-                            onViewHistoryClick = { screen = AppScreen.HISTORY }
+                            onViewHistoryClick = { screen = AppScreen.HISTORY },
+                            onAboutClick = { screen = AppScreen.ABOUT }
                         )
                         AppScreen.RECORD -> MoodLogFormScreen(
                             viewModel = viewModel,
@@ -74,6 +77,9 @@ class MainActivity : ComponentActivity() {
                         )
                         AppScreen.HISTORY -> MoodHistoryScreen(
                             viewModel = viewModel,
+                            onBack = { screen = AppScreen.HOME }
+                        )
+                        AppScreen.ABOUT -> AboutScreen(
                             onBack = { screen = AppScreen.HOME }
                         )
                     }

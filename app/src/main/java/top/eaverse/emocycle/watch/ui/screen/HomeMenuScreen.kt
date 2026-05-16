@@ -16,7 +16,8 @@ import androidx.wear.compose.material3.TimeText
 @Composable
 fun HomeMenuScreen(
     onRecordNowClick: () -> Unit,
-    onViewHistoryClick: () -> Unit
+    onViewHistoryClick: () -> Unit,
+    onAboutClick: () -> Unit
 ) {
     val scrollState = rememberTransformingLazyColumnState()
 
@@ -50,6 +51,15 @@ fun HomeMenuScreen(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text("查看记录")
+                }
+            }
+
+            item(key = "menu_about") {
+                Button(
+                    onClick = onAboutClick,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("关于")
                 }
             }
         }

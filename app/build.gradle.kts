@@ -40,6 +40,7 @@ android {
 
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -57,6 +58,7 @@ dependencies {
     implementation("androidx.wear.compose:compose-foundation:1.6.1")
     implementation("androidx.wear.compose:compose-material3:1.6.0")
     implementation("androidx.wear:wear-input:1.2.0")
+    implementation("com.google.android.horologist:horologist-composables:0.8.3-alpha")
 
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
