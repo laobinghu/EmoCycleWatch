@@ -1,11 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
-    kotlin("android")
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
 }
-
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 android {
     namespace = "top.eaverse.emocycle.watch"
@@ -43,12 +40,6 @@ android {
     buildFeatures {
         compose = true
         buildConfig = true
-    }
-}
-
-kotlin {
-    compilerOptions {
-        jvmTarget.set(JvmTarget.JVM_17)
     }
 }
 
