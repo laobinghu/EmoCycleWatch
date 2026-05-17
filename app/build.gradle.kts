@@ -6,11 +6,7 @@ plugins {
 
 android {
     namespace = "top.eaverse.emocycle.watch"
-    compileSdk {
-        version = release(36) {
-            minorApiLevel = 1
-        }
-    }
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "top.eaverse.emocycle.watch"
@@ -38,9 +34,13 @@ android {
     }
 
     buildFeatures {
-        compose = true
         buildConfig = true
+        compose = true
     }
+}
+
+ksp {
+    arg("room.generateKotlin", "true")
 }
 
 dependencies {
