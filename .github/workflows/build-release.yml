@@ -28,10 +28,21 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x gradlew
 
+      - name: Decode keystore
+        if: ${{ secrets.RELEASE_KEYSTORE_BASE64 != '' }}
+        shell: bash
+        run: |
+          echo "${{ secrets.RELEASE_KEYSTORE_BASE64 }}" | base64 -d > "${{ github.workspace }}/release.keystore"
+
       - name: Build debug APK
         run: ./gradlew --build-cache :app:assembleDebug
 
       - name: Build release APK
+        env:
+          RELEASE_STORE_FILE: ${{ github.workspace }}/release.keystore
+          RELEASE_STORE_PASSWORD: ${{ secrets.RELEASE_STORE_PASSWORD }}
+          RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
+          RELEASE_KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
         run: ./gradlew --build-cache :app:assembleRelease
 
       - name: Upload APKs as workflow artifact
@@ -66,7 +77,17 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x gradlew
 
+      - name: Decode keystore
+        shell: bash
+        run: |
+          echo "${{ secrets.RELEASE_KEYSTORE_BASE64 }}" | base64 -d > "${{ github.workspace }}/release.keystore"
+
       - name: Build release APK
+        env:
+          RELEASE_STORE_FILE: ${{ github.workspace }}/release.keystore
+          RELEASE_STORE_PASSWORD: ${{ secrets.RELEASE_STORE_PASSWORD }}
+          RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
+          RELEASE_KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
         run: ./gradlew --build-cache :app:assembleRelease
 
       - name: Get current date
@@ -76,7 +97,7 @@ jobs:
 
       - name: Rename APK with date
         run: |
-          cp app/build/outputs/apk/release/app-release-unsigned.apk \
+          cp app/build/outputs/apk/release/*.apk \
              app/build/outputs/apk/release/EmoCycle-${{ steps.date.outputs.date }}-${{ github.ref_name }}.apk
 
       - name: Create Release
