@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
+import androidx.compose.runtime.Composable
 import androidx.activity.viewModels
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -13,6 +14,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.room.Room
 import androidx.wear.compose.material3.AppScaffold
+import androidx.wear.compose.material.SwipeToDismissBox
 import top.eaverse.emocycle.watch.data.local.AppDatabase
 import top.eaverse.emocycle.watch.data.repository.MoodLogRepository
 import top.eaverse.emocycle.watch.sync.NoOpMoodLogSyncer
@@ -71,20 +73,49 @@ class MainActivity : ComponentActivity() {
                             onViewHistoryClick = { screen = AppScreen.HISTORY },
                             onAboutClick = { screen = AppScreen.ABOUT }
                         )
-                        AppScreen.RECORD -> MoodLogFormScreen(
-                            viewModel = viewModel,
+                        AppScreen.RECORD -> SwipeBackContainer(
                             onBack = { screen = AppScreen.HOME }
-                        )
-                        AppScreen.HISTORY -> MoodHistoryScreen(
-                            viewModel = viewModel,
+                        ) {
+                            MoodLogFormScreen(
+                                viewModel = viewModel,
+                                onBack = { screen = AppScreen.HOME }
+                            )
+                        }
+                        AppScreen.HISTORY -> SwipeBackContainer(
                             onBack = { screen = AppScreen.HOME }
-                        )
-                        AppScreen.ABOUT -> AboutScreen(
+                        ) {
+                            MoodHistoryScreen(
+                                viewModel = viewModel,
+                                onBack = { screen = AppScreen.HOME }
+                            )
+                        }
+                        AppScreen.ABOUT -> SwipeBackContainer(
                             onBack = { screen = AppScreen.HOME }
-                        )
+                        ) {
+                            AboutScreen(
+                                onBack = { screen = AppScreen.HOME }
+                            )
+                        }
                     }
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun SwipeBackContainer(
+    onBack: () -> Unit,
+    content: @Composable () -> Unit
+) {
+    SwipeToDismissBox(
+        onDismissed = onBack,
+        backgroundKey = "background",
+        contentKey = "content",
+        hasBackground = false
+    ) { isBackground: Boolean ->
+        if (!isBackground) {
+            content()
         }
     }
 }
